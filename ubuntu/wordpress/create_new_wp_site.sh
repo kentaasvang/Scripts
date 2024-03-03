@@ -65,7 +65,7 @@ if [ $CONFIGURE_NGINX -eq 1 ]; then
 
   # *** Creating Nginx configuration file
   echo "Creating Nginx configuration file"
-  sudo cp templates/nginx/nginx.default.conf /etc/nginx/sites-available/$SITE_NAME
+  sudo cp templates/nginx/default.conf /etc/nginx/sites-available/$SITE_NAME
   sudo sed -i "s/<SITE_NAME>/$SITE_NAME/g" /etc/nginx/sites-available/$SITE_NAME
 
   # Test the Nginx configuration
