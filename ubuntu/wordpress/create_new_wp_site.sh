@@ -2,7 +2,14 @@
 
 # ask inputs
 read -p "Enter the site name: " SITE_NAME
-echo $SITE_NAME
+read -p "Configure Nginx? (y/n): " CONFIGURE_NGINX
+
+# if CONFIGURE_NGINX is not "y" or "Y" then exit
+if [ "$CONFIGURE_NGINX" != "y" ] && [ "$CONFIGURE_NGINX" != "Y" ]; then
+  CONFIGURE_NGINX=0
+else
+  CONFIGURE_NGINX=1
+fi
 
 # *** check for installed dependecies ***
 # Need wget to download the latest version of WordPress
@@ -34,14 +41,18 @@ sudo cp -r wordpress/* /var/www/$SITE_NAME
 # clean up
 rm -rf wordpress-6.4.3.zip wordpress
 
-# *** Creating Nginx configuration file
-echo "Creating Nginx configuration file"
-sudo cp templates/nginx.default.conf /etc/nginx/sites-available/$SITE_NAME
-sudo sed -i "s/<SITE_NAME>/$SITE_NAME/g" /etc/nginx/sites-available/$SITE_NAME
+if [ $CONFIGURE_NGINX -eq 1 ]; then
 
-# testing the configuration, exiting if there is an error
-sudo nginx -t
-if [ $? -ne 0 ]; then
-  echo "Error: Nginx configuration file is not valid"
-  exit 1
+  # *** Creating Nginx configuration file
+  echo "Creating Nginx configuration file"
+  sudo cp templates/nginx.default.conf /etc/nginx/sites-available/$SITE_NAME
+  sudo sed -i "s/<SITE_NAME>/$SITE_NAME/g" /etc/nginx/sites-available/$SITE_NAME
+
+  # testing the configuration, exiting if there is an error
+  sudo nginx -t
+  if [ $? -ne 0 ]; then
+    echo "Error: Nginx configuration file is not valid"
+    exit 1
+  fi
+
 fi
