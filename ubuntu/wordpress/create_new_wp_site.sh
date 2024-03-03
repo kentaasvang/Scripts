@@ -65,16 +65,26 @@ if [ $CONFIGURE_NGINX -eq 1 ]; then
 
   # *** Creating Nginx configuration file
   echo "Creating Nginx configuration file"
-  sudo cp templates/nginx.default.conf /etc/nginx/sites-available/$SITE_NAME
+  sudo cp templates/nginx/nginx.default.conf /etc/nginx/sites-available/$SITE_NAME
   sudo sed -i "s/<SITE_NAME>/$SITE_NAME/g" /etc/nginx/sites-available/$SITE_NAME
 
-  # testing the configuration, exiting if there is an error
-  sudo nginx -t
-  if [ $? -ne 0 ]; then
-    echo "Error: Nginx configuration file is not valid"
+  # Test the Nginx configuration
+  output=$(nginx -t 2>&1)
+
+  # Check for the word 'error' or 'warn' in the output
+  if echo "$output" | grep -iq "error\|warn"; then
+    echo "Error or warning detected in Nginx configuration:"
+    echo "$output"
     exit 1
+  else
+    echo "Nginx configuration is OK."
   fi
 
+  # Enable the site
+  sudo ln -s /etc/nginx/sites-available/$SITE_NAME /etc/nginx/sites-enabled/
+
+  # reload Nginx
+  sudo systemctl reload nginx
 fi
 
 if [ $CONFIGURE_MYSQL -eq 1 ]; then
@@ -97,6 +107,4 @@ if [ $CONFIGURE_MYSQL -eq 1 ]; then
 
   # flush privileges
   mysql -u root -p$MYSQL_ROOT_PASSWORD -e "FLUSH PRIVILEGES;"
-
-  read -p "
 fi
