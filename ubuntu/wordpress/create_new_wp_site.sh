@@ -69,7 +69,7 @@ if [ $CONFIGURE_NGINX -eq 1 ]; then
   sudo sed -i "s/<SITE_NAME>/$SITE_NAME/g" /etc/nginx/sites-available/$SITE_NAME
 
   # Test the Nginx configuration
-  output=$(nginx -t 2>&1)
+  output=$(sudo nginx -t 2>&1)
 
   # Check for the word 'error' or 'warn' in the output
   if echo "$output" | grep -iq "error\|warn"; then
