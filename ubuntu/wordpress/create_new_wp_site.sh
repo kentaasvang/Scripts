@@ -93,10 +93,13 @@ if [ $CONFIGURE_MYSQL -eq 1 ]; then
   echo "Creating MySQL database and user"
   read -p "Enter the MySQL root password: " MYSQL_ROOT_PASSWORD
   read -p "Enter the MySQL user password for the new user: " MYSQL_USER_PASSWORD
-  read -p "Enter the MySQL database name: " MYSQL_DATABASE_NAME
 
   MYSQL_USER=$SITE_NAME"_user"
   MYSQL_DATABASE_NAME=$SITE_NAME"_db"
+
+  # change all periods to underscores
+  MYSQL_USER=${MYSQL_USER//./_}
+  MYSQL_DATABASE_NAME=${MYSQL_DATABASE_NAME//./_}
 
   # create the database
   mysql -u root -p$MYSQL_ROOT_PASSWORD -e "CREATE DATABASE $MYSQL_DATABASE_NAME;"
