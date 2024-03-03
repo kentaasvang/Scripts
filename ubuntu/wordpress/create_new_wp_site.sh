@@ -92,19 +92,21 @@ if [ $CONFIGURE_MYSQL -eq 1 ]; then
   # *** Creating MySQL database and user
   echo "Creating MySQL database and user"
   read -p "Enter the MySQL root password: " MYSQL_ROOT_PASSWORD
-  read -p "Enter the MySQL user: " MYSQL_USER
-  read -p "Enter the MySQL user password: " MYSQL_USER_PASSWORD
+  read -p "Enter the MySQL user password for the new user: " MYSQL_USER_PASSWORD
   read -p "Enter the MySQL database name: " MYSQL_DATABASE_NAME
+
+  MYSQL_USER=$SITE_NAME"_user"
+  MYSQL_DATABASE_NAME=$SITE_NAME"_db"
 
   # create the database
   mysql -u root -p$MYSQL_ROOT_PASSWORD -e "CREATE DATABASE $MYSQL_DATABASE_NAME;"
 
   # create the user
-  mysql -u root -p$MYSQL_ROOT_PASSWORD -e "CREATE USER '$MYSQL_USER'@'localhost' IDENTIFIED BY '$MYSQL_USER_PASSWORD';"
+  #mysql -u root -p$MYSQL_ROOT_PASSWORD -e "CREATE USER '$MYSQL_USER'@'localhost' IDENTIFIED BY '$MYSQL_USER_PASSWORD';"
 
   # grant privileges
-  mysql -u root -p$MYSQL_ROOT_PASSWORD -e "GRANT ALL PRIVILEGES ON $MYSQL_DATABASE_NAME.* TO '$MYSQL_USER'@'localhost';"
+  #mysql -u root -p$MYSQL_ROOT_PASSWORD -e "GRANT ALL PRIVILEGES ON $MYSQL_DATABASE_NAME.* TO '$MYSQL_USER'@'localhost';"
 
   # flush privileges
-  mysql -u root -p$MYSQL_ROOT_PASSWORD -e "FLUSH PRIVILEGES;"
+  #mysql -u root -p$MYSQL_ROOT_PASSWORD -e "FLUSH PRIVILEGES;"
 fi
