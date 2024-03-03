@@ -4,7 +4,7 @@
 read -p "Enter the site name: " SITE_NAME
 read -p "Create site folder? (y/n): " CREATE_SITE_FOLDER
 read -p "Configure Nginx? (y/n): " CONFIGURE_NGINX
-read -p "Configure MySQL? (y/n): " CONFIGURE_MYSQL
+# read -p "Configure MySQL? (y/n): " CONFIGURE_MYSQL
 
 # if CREATE_SITE_FOLDER is not "y" or "Y"
 if [ "$CREATE_SITE_FOLDER" != "y" ] && [ "$CREATE_SITE_FOLDER" != "Y" ]; then
@@ -86,6 +86,9 @@ if [ $CONFIGURE_NGINX -eq 1 ]; then
   # reload Nginx
   sudo systemctl reload nginx
 fi
+###################################################
+# ******* PASSWORDS ON COMMAND LINE IS BAD ********
+###################################################
 
 if [ $CONFIGURE_MYSQL -eq 1 ]; then
 
